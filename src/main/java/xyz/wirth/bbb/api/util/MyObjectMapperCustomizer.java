@@ -1,4 +1,4 @@
-package xyz.wirth.resteasyjackson;
+package xyz.wirth.bbb.api.util;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -9,9 +9,9 @@ import javax.inject.Singleton;
 @Singleton
 public class MyObjectMapperCustomizer implements ObjectMapperCustomizer {
 
-    @Override
-    public void customize(ObjectMapper objectMapper) {
-        // To suppress serializing properties with null values
-        objectMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
-    }
+  @Override
+  public void customize(ObjectMapper objectMapper) {
+    // To suppress serializing properties with null values
+    objectMapper.setSerializationInclusion(JsonInclude.Include.ALWAYS);
+  }
 }

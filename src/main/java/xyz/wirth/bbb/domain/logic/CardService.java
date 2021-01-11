@@ -1,0 +1,39 @@
+package xyz.wirth.bbb.domain.logic;
+
+import org.jboss.logging.Logger;
+import xyz.wirth.bbb.api.resource.UserResource;
+import xyz.wirth.bbb.domain.model.Card;
+import xyz.wirth.bbb.repositories.CardRepository;
+
+import javax.enterprise.context.ApplicationScoped;
+import javax.persistence.PersistenceException;
+import javax.transaction.Transactional;
+import java.util.List;
+
+@ApplicationScoped
+public class CardService {
+
+  private final Logger LOG = Logger.getLogger(UserResource.class.getSimpleName());
+
+  private final CardRepository cardRepository;
+
+  public CardService(CardRepository cardRepository) {
+    this.cardRepository = cardRepository;
+  }
+
+  public List<Card> listCards() {
+    return cardRepository.listAll();
+  }
+
+  @Transactional
+  public Card createCard(Card card) {
+    try {
+      cardRepository.persist(card);
+      LOG.infov("Created new Card {0}", card.toString());
+      return card;
+    } catch (PersistenceException pe) {
+      LOG.error("Failed to create the card", pe);
+      return null; // TODO exception
+    }
+  }
+}

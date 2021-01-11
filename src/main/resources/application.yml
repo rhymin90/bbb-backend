@@ -1,5 +1,33 @@
-display:
-  mach: 3
-  unit:
-    name: "mph"
-    factor: 2.23694
+quarkus:
+  # configure your datasource
+  datasource:
+    db-kind: postgresql
+    username: bbb-backend
+    password: bbb-backend
+    jdbc:
+      url: jdbc:postgresql://localhost:5432/bbb-backend
+  # drop and create the database at startup (use `update` to only update the schema)
+  # hibernate-orm:
+  #  database:
+  #    generation: update
+  # Flyway minimal config properties
+  flyway:
+    migrate-at-start: true
+  http:
+    access-log:
+      enabled: false
+    cors:
+      ~: true
+      methods: GET,PUT,POST
+      origins: http://localhost:5000, http://localhost:3000
+  log:
+    category:
+      "io.quarkus.smallrye.jwt.runtime.auth.MpJwtValidator":
+        level: TRACE
+# JWT & security
+mp:
+  jwt:
+    verify:
+      issuer: https://securetoken.google.com/bachelor-bullshit-bingo
+      publickey:
+        location: https://www.googleapis.com/service_accounts/v1/jwk/securetoken@system.gserviceaccount.com

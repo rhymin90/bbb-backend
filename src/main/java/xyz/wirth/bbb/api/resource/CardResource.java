@@ -1,0 +1,60 @@
+package xyz.wirth.bbb.api.resource;
+
+import io.quarkus.security.Authenticated;
+import org.jboss.logging.Logger;
+import xyz.wirth.bbb.api.dto.CardDto;
+import xyz.wirth.bbb.api.mapper.CardMapper;
+import xyz.wirth.bbb.domain.logic.CardService;
+
+import javax.transaction.Transactional;
+import javax.validation.Valid;
+import javax.ws.rs.*;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+import java.net.URI;
+import java.util.List;
+import java.util.stream.Collectors;
+
+@Path("/cards")
+@Produces(MediaType.APPLICATION_JSON)
+@Consumes(MediaType.APPLICATION_JSON)
+@Authenticated
+public class CardResource {
+
+  private final Logger LOG = Logger.getLogger(CardResource.class.getSimpleName());
+
+  private final CardMapper cardMapper;
+  private final CardService cardService;
+
+  public CardResource(CardMapper cardMapper, CardService cardService) {
+    this.cardMapper = cardMapper;
+    this.cardService = cardService;
+  }
+
+  @GET
+  public List<CardDto> list() {
+    LOG.debug("listCards()");
+    var cards = cardService.listCards();
+
+    // cards.forEach(card -> LOG.infov("Card: {0}", card));
+
+    return cards.stream().map(cardMapper::map).collect(Collectors.toList());
+  }
+
+  @POST
+  @Transactional
+  public Response add(@Valid CardDto cardDto) {
+    LOG.infov("Add card from DTO: {0}", cardDto.toString());
+    var card = cardMapper.map(cardDto);
+    var persistedCard = cardService.createCard(card);
+    if (persistedCard == null) {
+      return Response.serverError()
+          .entity("{'error':'Could not create card'}")
+          .build(); // TODO error message
+    } else {
+      return Response.created(URI.create("/cards/" + persistedCard.getId()))
+          .entity(cardMapper.map(persistedCard))
+          .build();
+    }
+  }
+}
