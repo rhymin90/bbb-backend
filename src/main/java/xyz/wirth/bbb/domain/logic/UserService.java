@@ -75,4 +75,9 @@ public class UserService {
       return null; // TODO exception
     }
   }
+
+  public boolean isUserInSystem(String email) {
+    var existingUser = getUserByEmail(email);
+    return existingUser != null;
+  }
 }

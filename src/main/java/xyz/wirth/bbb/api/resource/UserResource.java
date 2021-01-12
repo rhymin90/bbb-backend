@@ -4,11 +4,13 @@ import io.quarkus.security.Authenticated;
 import io.smallrye.jwt.auth.principal.DefaultJWTCallerPrincipal;
 import org.jboss.logging.Logger;
 import xyz.wirth.bbb.api.dto.UserDto;
+import xyz.wirth.bbb.api.dto.UserEmailDto;
 import xyz.wirth.bbb.api.mapper.UserMapper;
 import xyz.wirth.bbb.api.security.AuthenticationFacade;
 import xyz.wirth.bbb.domain.logic.UserService;
 import xyz.wirth.bbb.domain.model.Profile;
 
+import javax.annotation.security.PermitAll;
 import javax.validation.Valid;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
@@ -55,15 +57,24 @@ public class UserResource {
   }
 
   @GET
+  @Path("/exists/{email}")
+  @PermitAll
+  public UserEmailDto userExists(
+      @Context SecurityContext securityContext, @PathParam("email") String email) {
+    var userExists = userService.isUserInSystem(email);
+    return UserEmailDto.builder().email(email).exists(userExists).build();
+  }
+
+  @GET
   @Path("/id/{email}")
   public Response getUser(
       @Context SecurityContext securityContext, @PathParam("email") String email) {
     final var userPrincipal = (DefaultJWTCallerPrincipal) securityContext.getUserPrincipal();
     final var claimEmail = (String) userPrincipal.getClaim("email");
 
-    LOG.infov("Get data for user with email: {0} ( claim: {1} )", email, claimEmail);
-
     if (!email.equals(claimEmail)) {
+      LOG.warnv(
+          "Get data for user with email {0} not matching claim email: {1}", email, claimEmail);
       return Response.status(Response.Status.FORBIDDEN)
           .entity("{'error':'You are not allowed to request data of another user'}")
           .build(); // TODO error message

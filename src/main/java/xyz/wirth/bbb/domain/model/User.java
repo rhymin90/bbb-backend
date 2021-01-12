@@ -23,6 +23,7 @@ public class User {
   private Long winner;
   private int score = 0;
   private boolean tvNow = false;
+  private boolean verified = false;
 
   @Override
   public boolean equals(Object o) {
