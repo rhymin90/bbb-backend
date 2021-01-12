@@ -6,7 +6,6 @@ import xyz.wirth.bbb.api.dto.CardDto;
 import xyz.wirth.bbb.api.mapper.CardMapper;
 import xyz.wirth.bbb.domain.logic.CardService;
 
-import javax.transaction.Transactional;
 import javax.validation.Valid;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
@@ -42,7 +41,6 @@ public class CardResource {
   }
 
   @POST
-  @Transactional
   public Response add(@Valid CardDto cardDto) {
     LOG.infov("Add card from DTO: {0}", cardDto.toString());
     var card = cardMapper.map(cardDto);
