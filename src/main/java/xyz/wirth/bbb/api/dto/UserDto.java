@@ -14,6 +14,7 @@ public class UserDto {
   @NotBlank private String profile;
   private long finalist;
   private long winner;
+  private boolean verified;
 
   @Min(value = 0)
   private int score = 0;

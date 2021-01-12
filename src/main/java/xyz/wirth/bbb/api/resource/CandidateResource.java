@@ -6,7 +6,6 @@ import xyz.wirth.bbb.api.dto.CandidateDto;
 import xyz.wirth.bbb.api.mapper.CandidateMapper;
 import xyz.wirth.bbb.domain.logic.CandidateService;
 
-import javax.transaction.Transactional;
 import javax.validation.Valid;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
@@ -45,7 +44,6 @@ public class CandidateResource {
   }
 
   @POST
-  @Transactional
   public Response add(@Valid CandidateDto candidateDto) {
     LOG.infov("Add candidate from DTO: {0}", candidateDto.toString());
     var candidate = candidateMapper.map(candidateDto);
