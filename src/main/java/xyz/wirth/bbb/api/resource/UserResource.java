@@ -61,8 +61,12 @@ public class UserResource {
   @PermitAll
   public UserEmailDto userExists(
       @Context SecurityContext securityContext, @PathParam("email") String email) {
-    var userExists = userService.isUserInSystem(email);
-    return UserEmailDto.builder().email(email).exists(userExists).build();
+    var provider = userService.getUserProvider(email);
+    return UserEmailDto.builder()
+        .email(email)
+        .provider(provider.orElse("unknown"))
+        .exists(provider.isPresent())
+        .build();
   }
 
   @GET

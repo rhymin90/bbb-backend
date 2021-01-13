@@ -10,6 +10,7 @@ import javax.enterprise.context.ApplicationScoped;
 import javax.persistence.PersistenceException;
 import javax.transaction.Transactional;
 import java.util.List;
+import java.util.Optional;
 
 @ApplicationScoped
 public class UserService {
@@ -76,8 +77,8 @@ public class UserService {
     }
   }
 
-  public boolean isUserInSystem(String email) {
-    var existingUser = getUserByEmail(email);
-    return existingUser != null;
+  public Optional<String> getUserProvider(String email) {
+    var existingUser = Optional.ofNullable(getUserByEmail(email));
+    return existingUser.map(User::getProvider);
   }
 }
