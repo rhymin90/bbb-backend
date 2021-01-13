@@ -15,7 +15,6 @@ public abstract class UserMapper {
   public abstract User map(UserDto userDto);
 
   @InheritInverseConfiguration
-  // @Mapping(target = "id", ignore = true) // FIXME
   public abstract UserDto map(User user);
 
   public Profile mapProfileFromString(String input) {

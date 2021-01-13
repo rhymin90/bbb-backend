@@ -19,9 +19,7 @@ public class User {
   @Id private String email;
   private String username;
   private Profile profile;
-  private Long finalist;
-  private Long winner;
-  private int score = 0;
+  private String provider;
   private boolean tvNow = false;
   private boolean verified = false;
 

@@ -10,5 +10,6 @@ import javax.validation.constraints.NotBlank;
 public class UserEmailDto {
 
   @NotBlank private String email;
+  @NotBlank private String provider;
   private boolean exists;
 }
