@@ -101,8 +101,14 @@ public class UserResource {
       @PathParam("email") String email,
       @Valid UserDto userDto) {
 
-    LOG.infov("Update data for user with email {0}: {1}", email, userDto);
-    authenticationFacade.hasNeededRights(securityContext, Profile.ADMIN);
+    final var userPrincipal = (DefaultJWTCallerPrincipal) securityContext.getUserPrincipal();
+    final var claimEmail = (String) userPrincipal.getClaim("email");
+    LOG.infov("Update from {0} data for user with email {1}: {2}", claimEmail, email, userDto);
+
+    if (!email.equals(claimEmail)) {
+      // Updating data of users is only allowed as admin
+      authenticationFacade.hasNeededRights(securityContext, Profile.ADMIN);
+    }
 
     var user = userService.updateUser(userMapper.map(userDto));
 
@@ -119,6 +125,9 @@ public class UserResource {
   public Response add(@Valid UserDto userDto) {
     LOG.infov("Add user from DTO: {0}", userDto.toString());
     var user = userMapper.map(userDto);
+    if (user.getProfile() == null) {
+      user.setProfile(Profile.USER);
+    }
     var persistedUser = userService.createUser(user);
     if (persistedUser == null) {
       return Response.status(Response.Status.BAD_REQUEST)

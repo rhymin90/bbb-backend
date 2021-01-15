@@ -63,7 +63,10 @@ public class UserService {
     }
 
     // TODO extend
-    existingUser.setProfile(user.getProfile());
+    if (user.getProfile() != null) {
+      existingUser.setProfile(user.getProfile());
+    }
+    existingUser.setProvider(user.getProvider());
 
     try {
       userRepository.persist(existingUser);
