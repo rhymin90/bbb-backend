@@ -19,7 +19,7 @@ public abstract class UserMapper {
 
   public Profile mapProfileFromString(String input) {
     if (input == null) {
-      return Profile.USER;
+      return null;
     } else {
       return Profile.valueOf(input);
     }
