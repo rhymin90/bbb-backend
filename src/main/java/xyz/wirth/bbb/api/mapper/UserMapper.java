@@ -18,7 +18,7 @@ public abstract class UserMapper {
   public abstract UserDto map(User user);
 
   public Profile mapProfileFromString(String input) {
-    if (input == null) {
+    if (input == null || input.isBlank()) {
       return null;
     } else {
       return Profile.valueOf(input);

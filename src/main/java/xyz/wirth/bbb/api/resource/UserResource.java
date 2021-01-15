@@ -85,11 +85,10 @@ public class UserResource {
     }
     var user = userService.getUserByEmail(email);
 
-    LOG.debugv("Found data for user with email {0}: {1}", email, user);
-
     if (user == null) {
       return Response.status(Response.Status.NOT_FOUND).build();
     } else {
+      LOG.debugv("Found data for user with email {0}: {1}", email, user);
       return Response.ok().entity(userMapper.map(user)).build();
     }
   }
@@ -103,7 +102,7 @@ public class UserResource {
 
     final var userPrincipal = (DefaultJWTCallerPrincipal) securityContext.getUserPrincipal();
     final var claimEmail = (String) userPrincipal.getClaim("email");
-    LOG.infov("Update from {0} data for user with email {1}: {2}", claimEmail, email, userDto);
+    LOG.infov("Update from {0} data for user: {2}", claimEmail, userDto);
 
     if (!email.equals(claimEmail)) {
       // Updating data of users is only allowed as admin
@@ -112,11 +111,10 @@ public class UserResource {
 
     var user = userService.updateUser(userMapper.map(userDto));
 
-    LOG.debugv("Updated data for user with email {0}: {1}", email, user);
-
     if (user == null) {
       return Response.status(Response.Status.NOT_FOUND).build();
     } else {
+      LOG.debugv("Updated data for user with email {0}: {1}", email, user);
       return Response.ok().entity(userMapper.map(user)).build();
     }
   }
