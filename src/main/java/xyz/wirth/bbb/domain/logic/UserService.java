@@ -57,21 +57,29 @@ public class UserService {
 
     var existingUser = getUserByEmail(user.getEmail());
     if (existingUser == null) {
-      LOG.warnv("User with email {0} does not exist", user.getEmail());
+      LOG.warnv("User with email {0} does not exist in database", user.getEmail());
       // TODO exception
       return null;
     }
 
     // TODO extend
-    if (user.getProfile() != null) {
+    boolean updateNeeded = false;
+
+    if (user.getProfile() != null && existingUser.getProfile() != user.getProfile()) {
       existingUser.setProfile(user.getProfile());
+      updateNeeded = true;
     }
-    existingUser.setProvider(user.getProvider());
+    if (!existingUser.getProvider().equals(user.getProvider())) {
+      existingUser.setProvider(user.getProvider());
+      updateNeeded = true;
+    }
 
     try {
-      userRepository.persist(existingUser);
-      LOG.infov("Updated user {0}", existingUser.toString());
-      // return Response.created(URI.create("/users/" + user.getId())).build();
+      if (updateNeeded) {
+        userRepository.persist(existingUser);
+        LOG.infov("Updated user {0} in database", existingUser.toString());
+      }
+
       return existingUser;
     } catch (PersistenceException pe) {
       LOG.error("Unable to create the parameter", pe);
