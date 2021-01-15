@@ -120,6 +120,7 @@
 
     <build>
         <plugins>
+            <!-- Quarkus -->
             <plugin>
                 <groupId>io.quarkus</groupId>
                 <artifactId>quarkus-maven-plugin</artifactId>
@@ -135,6 +136,13 @@
                     </execution>
                 </executions>
             </plugin>
+            <!-- Flyway -->
+            <plugin>
+                <groupId>org.flywaydb</groupId>
+                <artifactId>flyway-maven-plugin</artifactId>
+                <version>7.5.0</version>
+            </plugin>
+            <!-- Standard maven stuff -->
             <plugin>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>${compiler-plugin.version}</version>
