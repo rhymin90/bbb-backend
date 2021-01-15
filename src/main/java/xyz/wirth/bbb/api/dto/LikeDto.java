@@ -8,7 +8,6 @@ import javax.validation.constraints.NotBlank;
 @Data
 public class LikeDto {
 
-  private Long id;
   @NotBlank private String userId;
 
   @Min(1)

@@ -24,11 +24,6 @@ public class LikeService {
   public List<Like> listLikes() {
     return likeRepository.listAll();
   }
-
-  public boolean hasLike(@NonNull Long id) {
-    return likeRepository.findById(id) != null;
-  }
-
   /*
   public boolean existingLike(String userId, Long cardId){
     likeRepository.list()
@@ -36,11 +31,8 @@ public class LikeService {
   */
 
   @Transactional
-  public void deleteLike(@NonNull Long id) {
-    var existingLike = hasLike(id);
-    if (existingLike) {
-      likeRepository.deleteById(id);
-    }
+  public void deleteLike(@NonNull Like like) {
+    likeRepository.delete("userId = ?1 and cardId = ?2", like.getUserId(), like.getCardId());
   }
 
   @Transactional
