@@ -18,6 +18,9 @@ quarkus:
       ~: true
       methods: GET,POST,DELETE,OPTIONS
       origins: http://localhost:5000, http://localhost:3000
+  swagger-ui:
+    with-credentials: true
+    persist-authorization: true
   log:
     category:
       "io.quarkus.smallrye.jwt.runtime.auth.MpJwtValidator":
