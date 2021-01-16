@@ -50,8 +50,7 @@ public class UserResource {
   @GET
   @Path("/me")
   public UserDto getUserInfo(@Context SecurityContext securityContext) {
-    final var userPrincipal = (DefaultJWTCallerPrincipal) securityContext.getUserPrincipal();
-    final var email = (String) userPrincipal.getClaim("email");
+    final var email = authenticationFacade.getRequesterUserId(securityContext);
     var user = userService.getUserByEmail(email);
     return userMapper.map(user);
   }
@@ -104,12 +103,13 @@ public class UserResource {
     final var claimEmail = (String) userPrincipal.getClaim("email");
     LOG.infov("Update from {0} data for user: {2}", claimEmail, userDto);
 
+    var isAdmin = false;
     if (!email.equals(claimEmail)) {
       // Updating data of users is only allowed as admin
-      authenticationFacade.hasNeededRights(securityContext, Profile.ADMIN);
+      isAdmin = authenticationFacade.hasNeededRights(securityContext, Profile.ADMIN);
     }
 
-    var user = userService.updateUser(userMapper.map(userDto));
+    var user = userService.updateUser(userMapper.map(userDto), isAdmin);
 
     if (user == null) {
       return Response.status(Response.Status.NOT_FOUND).build();
@@ -123,8 +123,8 @@ public class UserResource {
   public Response add(@Valid UserDto userDto) {
     LOG.infov("Add user from DTO: {0}", userDto.toString());
     var user = userMapper.map(userDto);
-    if (user.getProfile() == null) {
-      user.setProfile(Profile.USER);
+    if (user.getProfile().equals(Profile.ADMIN)) {
+      return Response.status(Response.Status.FORBIDDEN).build();
     }
     var persistedUser = userService.createUser(user);
     if (persistedUser == null) {

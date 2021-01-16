@@ -3,6 +3,7 @@ package xyz.wirth.bbb.domain.logic;
 import lombok.NonNull;
 import org.jboss.logging.Logger;
 import xyz.wirth.bbb.api.resource.UserResource;
+import xyz.wirth.bbb.domain.model.Profile;
 import xyz.wirth.bbb.domain.model.User;
 import xyz.wirth.bbb.repositories.UserRepository;
 
@@ -53,7 +54,7 @@ public class UserService {
   }
 
   @Transactional
-  public User updateUser(@NonNull User user) {
+  public User updateUser(@NonNull User user, boolean isAdmin) {
 
     var existingUser = getUserByEmail(user.getEmail());
     if (existingUser == null) {
@@ -66,8 +67,12 @@ public class UserService {
     boolean updateNeeded = false;
 
     if (user.getProfile() != null && existingUser.getProfile() != user.getProfile()) {
-      existingUser.setProfile(user.getProfile());
-      updateNeeded = true;
+      if (isAdmin
+          || existingUser.getProfile().equals(Profile.ADMIN)
+          || user.getProfile().equals(Profile.USER)) {
+        existingUser.setProfile(user.getProfile());
+        updateNeeded = true;
+      }
     }
     if (!existingUser.getProvider().equals(user.getProvider())) {
       existingUser.setProvider(user.getProvider());

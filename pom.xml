@@ -20,6 +20,7 @@
         <quarkus-plugin.version>1.10.5.Final</quarkus-plugin.version>
         <compiler-plugin.version>3.8.1</compiler-plugin.version>
         <quarkus.platform.group-id>io.quarkus</quarkus.platform.group-id>
+        <quarkus.container-image.additional-tags>LATEST</quarkus.container-image.additional-tags>
     </properties>
 
     <dependencyManagement>

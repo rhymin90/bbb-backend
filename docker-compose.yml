@@ -13,15 +13,13 @@ services:
     restart: always
     volumes:
       - ./postgres-data/:/var/lib/postgresql/data
-    # ports:
-    #  - "5432:5432"
     env_file: database.env
   bbb_backend:
     container_name: bbb-backend
     restart: always
-    build: .
+    build: rhymin/bbb-backend:LATEST
     env_file: backend.env
+    expose:
+      - "8080"
     links:
       - postgres
-
-      

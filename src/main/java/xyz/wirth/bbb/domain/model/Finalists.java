@@ -17,8 +17,8 @@ import javax.persistence.Table;
 public class Finalists {
 
   @Id private String userId;
-  private Long winner;
-  private Long second;
+  private int winner;
+  private int second;
 
   @Override
   public boolean equals(Object o) {
