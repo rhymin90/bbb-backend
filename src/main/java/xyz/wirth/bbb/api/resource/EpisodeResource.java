@@ -1,6 +1,7 @@
 package xyz.wirth.bbb.api.resource;
 
 import io.quarkus.security.Authenticated;
+import org.jboss.logging.Logger;
 import xyz.wirth.bbb.api.dto.EpisodeDto;
 
 import javax.ws.rs.Consumes;
@@ -15,6 +16,7 @@ import java.util.List;
 @Consumes(MediaType.APPLICATION_JSON)
 @Authenticated
 public class EpisodeResource {
+  private final Logger LOG = Logger.getLogger(getClass().getSimpleName());
 
   @GET
   @Path("/upcoming")

@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
 @ApplicationScoped
 public class DismissedService {
 
-  private final Logger LOG = Logger.getLogger(DismissedService.class.getSimpleName());
+  private final Logger LOG = Logger.getLogger(getClass().getSimpleName());
 
   private final DismissedRepository dismissedRepository;
 

@@ -2,7 +2,6 @@ package xyz.wirth.bbb.domain.logic;
 
 import lombok.NonNull;
 import org.jboss.logging.Logger;
-import xyz.wirth.bbb.api.resource.UserResource;
 import xyz.wirth.bbb.domain.model.Profile;
 import xyz.wirth.bbb.domain.model.User;
 import xyz.wirth.bbb.repositories.UserRepository;
@@ -16,7 +15,7 @@ import java.util.Optional;
 @ApplicationScoped
 public class UserService {
 
-  private final Logger LOG = Logger.getLogger(UserResource.class.getSimpleName());
+  private final Logger LOG = Logger.getLogger(getClass().getSimpleName());
 
   private final UserRepository userRepository;
 

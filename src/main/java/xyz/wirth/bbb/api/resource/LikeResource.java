@@ -22,7 +22,7 @@ import java.util.stream.Collectors;
 @Authenticated
 public class LikeResource {
 
-  private final Logger LOG = Logger.getLogger(LikeResource.class.getSimpleName());
+  private final Logger LOG = Logger.getLogger(getClass().getSimpleName());
 
   private final AuthenticationFacade authenticationFacade;
   private final LikeMapper likeMapper;
