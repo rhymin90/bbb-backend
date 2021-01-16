@@ -6,7 +6,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>xyz.wirth</groupId>
     <artifactId>bbb-backend</artifactId>
-    <version>1.0.0-SNAPSHOT</version>
+    <version>1.1.0-SNAPSHOT</version>
 
     <properties>
         <surefire-plugin.version>2.22.1</surefire-plugin.version>
@@ -20,7 +20,7 @@
         <quarkus-plugin.version>1.10.5.Final</quarkus-plugin.version>
         <compiler-plugin.version>3.8.1</compiler-plugin.version>
         <quarkus.platform.group-id>io.quarkus</quarkus.platform.group-id>
-        <quarkus.container-image.additional-tags>LATEST</quarkus.container-image.additional-tags>
+        <quarkus.container-image.additional-tags>latest</quarkus.container-image.additional-tags>
     </properties>
 
     <dependencyManagement>

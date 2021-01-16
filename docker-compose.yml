@@ -17,7 +17,7 @@ services:
   bbb_backend:
     container_name: bbb-backend
     restart: always
-    build: rhymin/bbb-backend:LATEST
+    image: rhymin/bbb-backend:latest
     env_file: backend.env
     expose:
       - "8080"
