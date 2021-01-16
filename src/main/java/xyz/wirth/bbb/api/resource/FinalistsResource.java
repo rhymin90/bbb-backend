@@ -18,7 +18,7 @@ import javax.ws.rs.core.SecurityContext;
 @Authenticated
 public class FinalistsResource {
 
-  private final Logger LOG = Logger.getLogger(FinalistsResource.class.getSimpleName());
+  private final Logger LOG = Logger.getLogger(getClass().getSimpleName());
 
   private final AuthenticationFacade authenticationFacade;
 

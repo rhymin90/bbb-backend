@@ -1,6 +1,7 @@
 package xyz.wirth.bbb.api.resource;
 
 import io.quarkus.security.Authenticated;
+import org.jboss.logging.Logger;
 import xyz.wirth.bbb.api.dto.FeatureDto;
 import xyz.wirth.bbb.domain.model.Features;
 
@@ -18,6 +19,7 @@ import java.util.stream.Collectors;
 @Consumes(MediaType.APPLICATION_JSON)
 @Authenticated
 public class FeatureResource {
+  private final Logger LOG = Logger.getLogger(getClass().getSimpleName());
 
   @GET
   public List<FeatureDto> get() {

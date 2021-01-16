@@ -13,7 +13,7 @@ import java.util.List;
 @ApplicationScoped
 public class LikeService {
 
-  private final Logger LOG = Logger.getLogger(LikeService.class.getSimpleName());
+  private final Logger LOG = Logger.getLogger(getClass().getSimpleName());
 
   private final LikeRepository likeRepository;
 

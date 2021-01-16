@@ -1,7 +1,6 @@
 package xyz.wirth.bbb.domain.logic;
 
 import org.jboss.logging.Logger;
-import xyz.wirth.bbb.api.resource.UserResource;
 import xyz.wirth.bbb.domain.model.Candidate;
 import xyz.wirth.bbb.repositories.CandidateRepository;
 
@@ -13,7 +12,7 @@ import java.util.List;
 @ApplicationScoped
 public class CandidateService {
 
-  private final Logger LOG = Logger.getLogger(UserResource.class.getSimpleName());
+  private final Logger LOG = Logger.getLogger(getClass().getSimpleName());
 
   private final CandidateRepository candidateRepository;
 

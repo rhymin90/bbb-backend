@@ -22,7 +22,7 @@ import java.util.stream.Collectors;
 @Authenticated
 public class DismissedResource {
 
-  private final Logger LOG = Logger.getLogger(DismissedResource.class.getSimpleName());
+  private final Logger LOG = Logger.getLogger(getClass().getSimpleName());
 
   private final AuthenticationFacade authenticationFacade;
   private final DismissedMapper dismissedMapper;

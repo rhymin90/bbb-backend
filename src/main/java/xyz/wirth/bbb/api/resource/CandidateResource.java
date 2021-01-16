@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
 // @Authenticated
 public class CandidateResource {
 
-  private final Logger LOG = Logger.getLogger(CandidateResource.class.getSimpleName());
+  private final Logger LOG = Logger.getLogger(getClass().getSimpleName());
 
   private final CandidateMapper candidateMapper;
   private final CandidateService candidateService;

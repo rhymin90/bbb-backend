@@ -20,7 +20,7 @@ import java.util.stream.Collectors;
 @Authenticated
 public class CardResource {
 
-  private final Logger LOG = Logger.getLogger(CardResource.class.getSimpleName());
+  private final Logger LOG = Logger.getLogger(getClass().getSimpleName());
 
   private final CardMapper cardMapper;
   private final CardService cardService;
