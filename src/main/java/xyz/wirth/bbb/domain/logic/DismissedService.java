@@ -9,6 +9,7 @@ import javax.enterprise.context.ApplicationScoped;
 import javax.persistence.PersistenceException;
 import javax.transaction.Transactional;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @ApplicationScoped
 public class DismissedService {
@@ -21,8 +22,14 @@ public class DismissedService {
     this.dismissedRepository = dismissedRepository;
   }
 
-  public List<Dismissed> listDismisseds() {
+  public List<Dismissed> listAllDismisseds() {
     return dismissedRepository.listAll();
+  }
+
+  public List<Dismissed> listDismisseds(String userId) {
+    return dismissedRepository.listAll().stream()
+        .filter(it -> it.getUserId().equals(userId))
+        .collect(Collectors.toList());
   }
 
   public boolean hasDismissed(@NonNull Long id) {
@@ -30,9 +37,9 @@ public class DismissedService {
   }
 
   @Transactional
-  public void deleteDismissed(@NonNull Long id) {
-    var existingDismissed = hasDismissed(id);
-    if (existingDismissed) {
+  public void deleteDismissed(@NonNull Long id, String userId) {
+    var dismissed = dismissedRepository.findByIdOptional(id);
+    if (dismissed.isPresent() && dismissed.get().getUserId().equals(userId)) {
       dismissedRepository.deleteById(id);
     }
   }

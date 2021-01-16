@@ -1,5 +1,6 @@
 package xyz.wirth.bbb.api.security;
 
+import io.quarkus.security.ForbiddenException;
 import io.quarkus.security.UnauthorizedException;
 import io.smallrye.jwt.auth.principal.DefaultJWTCallerPrincipal;
 import org.jboss.logging.Logger;
@@ -20,7 +21,7 @@ public class AuthenticationFacade {
     this.userService = userService;
   }
 
-  public void hasNeededRights(SecurityContext securityContext, Profile neededProfile) {
+  public boolean hasNeededRights(SecurityContext securityContext, Profile neededProfile) {
     final var userPrincipal = (DefaultJWTCallerPrincipal) securityContext.getUserPrincipal();
     if (userPrincipal == null) {
       throw new UnauthorizedException("You are not authorized");
@@ -37,5 +38,21 @@ public class AuthenticationFacade {
       LOG.warnv("User {0} does not have the needed profile {1}", user, neededProfile);
       throw new UnauthorizedException("You don't have enough rights for the desired action");
     }
+    return true;
+  }
+
+  public void compareRequesterWithUserId(SecurityContext securityContext, String userId) {
+    final var email = getRequesterUserId(securityContext);
+    if (!email.equals(userId)) {
+      throw new ForbiddenException("You are not allowed to do that");
+    }
+  }
+
+  public String getRequesterUserId(SecurityContext securityContext) {
+    final var userPrincipal = (DefaultJWTCallerPrincipal) securityContext.getUserPrincipal();
+    if (userPrincipal == null) {
+      throw new UnauthorizedException("You are not authorized");
+    }
+    return (String) userPrincipal.getClaim("email");
   }
 }

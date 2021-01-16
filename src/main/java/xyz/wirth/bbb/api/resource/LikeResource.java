@@ -1,7 +1,6 @@
 package xyz.wirth.bbb.api.resource;
 
 import io.quarkus.security.Authenticated;
-import io.smallrye.jwt.auth.principal.DefaultJWTCallerPrincipal;
 import org.jboss.logging.Logger;
 import xyz.wirth.bbb.api.dto.LikeDto;
 import xyz.wirth.bbb.api.mapper.LikeMapper;
@@ -47,11 +46,7 @@ public class LikeResource {
   @Path("/delete")
   public Response delete(@Context SecurityContext securityContext, @Valid LikeDto likeDto) {
     LOG.infov("Delete like: {0}", likeDto);
-    final var userPrincipal = (DefaultJWTCallerPrincipal) securityContext.getUserPrincipal();
-    final var email = (String) userPrincipal.getClaim("email");
-    if (!email.equals(likeDto.getUserId())) {
-      return Response.status(Response.Status.FORBIDDEN).build();
-    }
+    authenticationFacade.compareRequesterWithUserId(securityContext, likeDto.getUserId());
     var like = likeMapper.map(likeDto);
     likeService.deleteLike(like);
     return Response.ok().build(); // TODO deleted response
@@ -60,11 +55,7 @@ public class LikeResource {
   @POST
   public Response add(@Context SecurityContext securityContext, @Valid LikeDto likeDto) {
     LOG.infov("Add like from DTO: {0}", likeDto.toString());
-    final var userPrincipal = (DefaultJWTCallerPrincipal) securityContext.getUserPrincipal();
-    final var email = (String) userPrincipal.getClaim("email");
-    if (!email.equals(likeDto.getUserId())) {
-      return Response.status(Response.Status.FORBIDDEN).build();
-    }
+    authenticationFacade.compareRequesterWithUserId(securityContext, likeDto.getUserId());
 
     var like = likeMapper.map(likeDto);
     var persistedLike = likeService.createLike(like);

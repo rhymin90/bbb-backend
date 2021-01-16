@@ -20,6 +20,7 @@
         <quarkus-plugin.version>1.10.5.Final</quarkus-plugin.version>
         <compiler-plugin.version>3.8.1</compiler-plugin.version>
         <quarkus.platform.group-id>io.quarkus</quarkus.platform.group-id>
+        <quarkus.container-image.additional-tags>LATEST</quarkus.container-image.additional-tags>
     </properties>
 
     <dependencyManagement>
@@ -120,6 +121,7 @@
 
     <build>
         <plugins>
+            <!-- Quarkus -->
             <plugin>
                 <groupId>io.quarkus</groupId>
                 <artifactId>quarkus-maven-plugin</artifactId>
@@ -135,6 +137,13 @@
                     </execution>
                 </executions>
             </plugin>
+            <!-- Flyway -->
+            <plugin>
+                <groupId>org.flywaydb</groupId>
+                <artifactId>flyway-maven-plugin</artifactId>
+                <version>7.5.0</version>
+            </plugin>
+            <!-- Standard maven stuff -->
             <plugin>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>${compiler-plugin.version}</version>

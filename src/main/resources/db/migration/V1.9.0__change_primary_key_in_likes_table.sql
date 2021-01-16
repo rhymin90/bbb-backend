@@ -1,4 +1,4 @@
-alter TABLE likes drop CONSTRAINT likes_pkey;
-alter TABLE likes drop CONSTRAINT likes_unique;
-alter TABLE likes drop COLUMN id;
-alter TABLE likes ADD PRIMARY KEY (cardId, userId);
+alter table likes drop constraint if exists likes_pkey;
+alter table likes drop constraint if exists likes_unique;
+alter table likes drop column id;
+alter table likes add primary key (cardId, userId);

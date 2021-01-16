@@ -1,23 +1,22 @@
 package xyz.wirth.bbb.api.resource;
 
-import io.quarkus.security.Authenticated;
 import org.jboss.logging.Logger;
 import xyz.wirth.bbb.api.dto.CandidateDto;
 import xyz.wirth.bbb.api.mapper.CandidateMapper;
 import xyz.wirth.bbb.domain.logic.CandidateService;
 
 import javax.validation.Valid;
-import javax.ws.rs.*;
-import javax.ws.rs.core.MediaType;
+import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.core.Response;
 import java.net.URI;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@Path("/candidates")
-@Produces(MediaType.APPLICATION_JSON)
-@Consumes(MediaType.APPLICATION_JSON)
-@Authenticated
+// @Path("/candidates")
+// @Produces(MediaType.APPLICATION_JSON)
+// @Consumes(MediaType.APPLICATION_JSON)
+// @Authenticated
 public class CandidateResource {
 
   private final Logger LOG = Logger.getLogger(CandidateResource.class.getSimpleName());

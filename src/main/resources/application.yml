@@ -2,17 +2,15 @@ quarkus:
   # configure your datasource
   datasource:
     db-kind: postgresql
-    username: bbb-backend
-    password: bbb-backend
+    username: ${DB_USER:bbb-backend}
+    password: ${DB_PASSWORD:bbb-backend}
     jdbc:
-      url: jdbc:postgresql://localhost:5432/bbb-backend
-  # drop and create the database at startup (use `update` to only update the schema)
-  # hibernate-orm:
-  #  database:
-  #    generation: update
+      url: ${DB_URL:jdbc:postgresql://localhost:5432/bbb-backend}
   # Flyway minimal config properties
   flyway:
+    schemas: public
     migrate-at-start: true
+    validate-on-migrate: true
   http:
     access-log:
       enabled: false
