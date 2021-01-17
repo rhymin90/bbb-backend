@@ -3,7 +3,9 @@ package xyz.wirth.bbb.api.resource;
 import io.quarkus.security.Authenticated;
 import org.jboss.logging.Logger;
 import xyz.wirth.bbb.api.dto.FinalistsDto;
+import xyz.wirth.bbb.api.mapper.FinalistsMapper;
 import xyz.wirth.bbb.api.security.AuthenticationFacade;
+import xyz.wirth.bbb.domain.logic.FinalistsService;
 
 import javax.validation.Valid;
 import javax.ws.rs.*;
@@ -21,32 +23,28 @@ public class FinalistsResource {
   private final Logger LOG = Logger.getLogger(getClass().getSimpleName());
 
   private final AuthenticationFacade authenticationFacade;
+  private final FinalistsMapper finalistsMapper;
+  private final FinalistsService finalistsService;
 
-  public FinalistsResource(AuthenticationFacade authenticationFacade) {
-    this.authenticationFacade = authenticationFacade;
-  }
-  // private final FinalistsMapper finalistsMapper;
-  // private final FinalistsService finalistsService;
-
-  /*
   public FinalistsResource(
-      AuthenticationFacade authenticationFacade, FinalistsMapper finalistsMapper, FinalistsService finalistsService) {
+      AuthenticationFacade authenticationFacade,
+      FinalistsMapper finalistsMapper,
+      FinalistsService finalistsService) {
     this.authenticationFacade = authenticationFacade;
     this.finalistsMapper = finalistsMapper;
     this.finalistsService = finalistsService;
   }
-  */
 
   @GET
   public FinalistsDto get(@Context SecurityContext securityContext) {
-    final var email = authenticationFacade.getRequesterUserId(securityContext);
-    LOG.debugv("getFinalists() for {}", email);
-    // var finalistss = finalistsService.listFinalistss();
+    final var userId = authenticationFacade.getRequesterUserId(securityContext);
+    LOG.debugv("getFinalists() for {}", userId);
+    var finalistss = finalistsService.getFinalists(userId);
 
     // finalistss.forEach(finalists -> LOG.infov("Finalists: {0}", finalists));
 
     // return finalistss.stream().map(finalistsMapper::map).collect(Collectors.toList());
-    return FinalistsDto.builder().userId(email).winner(1).second(2).build();
+    return FinalistsDto.builder().userId(userId).winner(1).second(2).build();
   }
 
   @POST
@@ -55,8 +53,6 @@ public class FinalistsResource {
     LOG.infov("Add or update finalists from DTO: {0}", finalistsDto.toString());
     authenticationFacade.compareRequesterWithUserId(securityContext, finalistsDto.getUserId());
 
-    return Response.accepted().build();
-    /*
     var finalists = finalistsMapper.map(finalistsDto);
     var persistedFinalists = finalistsService.createFinalists(finalists);
     if (persistedFinalists == null) {
@@ -66,6 +62,5 @@ public class FinalistsResource {
     } else {
       return Response.accepted().entity(finalistsMapper.map(persistedFinalists)).build();
     }
-    */
   }
 }
