@@ -1,6 +1,6 @@
 create table episodes (
-  id long primary key,
+  id int primary key,
   date timestamp without time zone,
-  amountDismissed int,
+  amountDismissed int
 );
 
