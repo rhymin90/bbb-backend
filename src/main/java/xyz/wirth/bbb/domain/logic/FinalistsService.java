@@ -35,7 +35,7 @@ public class FinalistsService {
   }
 
   @Transactional
-  public Finalists createFinalists(Finalists finalists) {
+  public Finalists createOrUpdateFinalists(Finalists finalists) {
 
     try {
       var existingFinalists = finalistsRepository.findByUserId(finalists.getUserId());
@@ -43,7 +43,7 @@ public class FinalistsService {
         existingFinalists.get().setWinner(finalists.getWinner());
         existingFinalists.get().setSecond(finalists.getSecond());
         finalistsRepository.persist(existingFinalists.get());
-        LOG.infov("Created new Finalists entry {0}", existingFinalists.get());
+        LOG.infov("Updated Finalists entry {0}", existingFinalists.get());
         return existingFinalists.get();
       } else {
         finalistsRepository.persist(finalists);
