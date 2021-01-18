@@ -9,7 +9,5 @@ public class EpisodeDto {
 
   private int episode;
   private long date;
-  private String time;
   private int amountDismissed;
-  private boolean upcomingEpisode;
 }
