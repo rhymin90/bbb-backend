@@ -77,6 +77,10 @@ public class UserService {
       existingUser.setProvider(user.getProvider());
       updateNeeded = true;
     }
+    if (user.getUsername() != null && !existingUser.getUsername().equals(user.getUsername())) {
+      existingUser.setUsername(user.getUsername());
+      updateNeeded = true;
+    }
 
     try {
       if (updateNeeded) {
