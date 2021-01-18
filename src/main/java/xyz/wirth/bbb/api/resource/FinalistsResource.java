@@ -54,7 +54,7 @@ public class FinalistsResource {
     authenticationFacade.compareRequesterWithUserId(securityContext, finalistsDto.getUserId());
 
     var finalists = finalistsMapper.map(finalistsDto);
-    var persistedFinalists = finalistsService.createFinalists(finalists);
+    var persistedFinalists = finalistsService.createOrUpdateFinalists(finalists);
     if (persistedFinalists == null) {
       return Response.serverError()
           .entity("{'error':'Could not create finalists'}")

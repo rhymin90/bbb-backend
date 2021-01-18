@@ -8,7 +8,7 @@ import javax.validation.constraints.NotBlank;
 public class UserDto {
 
   @NotBlank private String email;
-  @NotBlank private String name;
+  private String name;
   private String profile;
   @NotBlank private String provider;
   private boolean verified;
