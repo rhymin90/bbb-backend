@@ -45,12 +45,14 @@ public class EpisodeService {
   @Transactional
   public Episode createOrUpdateEpisode(Episode episode) {
     try {
-      var existingEpisode = episodeRepository.findByIdOptional(episode.getId());
-      if (existingEpisode.isPresent()) {
-
-        episodeRepository.persist(existingEpisode.get());
-        LOG.infov("Updated Episode entry {0}", existingEpisode.get());
-        return existingEpisode.get();
+      var existingEpisodeOptional = episodeRepository.findByIdOptional(episode.getId());
+      if (existingEpisodeOptional.isPresent()) {
+        var existingEpisode = existingEpisodeOptional.get();
+        existingEpisode.setAmountDismissed(episode.getAmountDismissed());
+        existingEpisode.setDate(episode.getDate());
+        episodeRepository.persist(existingEpisode);
+        LOG.infov("Updated Episode entry {0}", existingEpisode);
+        return existingEpisode;
       } else {
         episodeRepository.persist(episode);
         LOG.infov("Created new Episode entry {0}", episode);
