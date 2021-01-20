@@ -31,7 +31,7 @@ public class EpisodeService {
   public Episode getUpcomingEpsiode() {
     Instant now = Instant.now();
     return episodeRepository.listAll().stream()
-        .filter(it -> it.getDate().isBefore(now))
+        .filter(it -> it.getDate().isAfter(now))
         .min(Comparator.comparing(Episode::getDate))
         .orElseThrow(() -> new NotFoundException("No episode in the future was found"));
   }
