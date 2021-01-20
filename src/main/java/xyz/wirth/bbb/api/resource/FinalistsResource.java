@@ -39,12 +39,9 @@ public class FinalistsResource {
   public FinalistsDto get(@Context SecurityContext securityContext) {
     final var userId = authenticationFacade.getRequesterUserId(securityContext);
     LOG.debugv("getFinalists() for {}", userId);
-    var finalistss = finalistsService.getFinalists(userId);
+    var finalists = finalistsService.getFinalists(userId);
 
-    // finalistss.forEach(finalists -> LOG.infov("Finalists: {0}", finalists));
-
-    // return finalistss.stream().map(finalistsMapper::map).collect(Collectors.toList());
-    return FinalistsDto.builder().userId(userId).winner(1).second(2).build();
+    return finalistsMapper.map(finalists);
   }
 
   @POST
