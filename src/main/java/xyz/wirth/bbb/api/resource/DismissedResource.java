@@ -41,7 +41,7 @@ public class DismissedResource {
   public List<DismissedDto> list(@Context SecurityContext securityContext) {
     LOG.debug("listDismisseds()");
     final var email = authenticationFacade.getRequesterUserId(securityContext);
-    var dismisseds = dismissedService.listDismisseds(email);
+    var dismisseds = dismissedService.listDismissedsForUser(email);
     return dismisseds.stream().map(dismissedMapper::map).collect(Collectors.toList());
   }
 

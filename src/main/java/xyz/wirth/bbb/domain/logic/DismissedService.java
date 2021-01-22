@@ -22,18 +22,10 @@ public class DismissedService {
     this.dismissedRepository = dismissedRepository;
   }
 
-  public List<Dismissed> listAllDismisseds() {
-    return dismissedRepository.listAll();
-  }
-
-  public List<Dismissed> listDismisseds(String userId) {
+  public List<Dismissed> listDismissedsForUser(String userId) {
     return dismissedRepository.listAll().stream()
         .filter(it -> it.getUserId().equals(userId))
         .collect(Collectors.toList());
-  }
-
-  public boolean hasDismissed(@NonNull Long id) {
-    return dismissedRepository.findById(id) != null;
   }
 
   @Transactional
