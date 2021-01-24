@@ -73,11 +73,13 @@ public class UserService {
         updateNeeded = true;
       }
     }
-    if (!existingUser.getProvider().equals(user.getProvider())) {
+    if (!user.getProvider().isBlank() && !existingUser.getProvider().equals(user.getProvider())) {
       existingUser.setProvider(user.getProvider());
       updateNeeded = true;
     }
-    if (user.getUsername() != null && !existingUser.getUsername().equals(user.getUsername())) {
+    if (user.getUsername() != null
+        && !user.getUsername().isBlank()
+        && !existingUser.getUsername().equals(user.getUsername())) {
       existingUser.setUsername(user.getUsername());
       updateNeeded = true;
     }
