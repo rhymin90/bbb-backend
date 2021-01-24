@@ -17,6 +17,7 @@ public class FinalistsDto {
   @NotBlank private String userId;
 
   @PositiveOrZero private int winner;
-
+  private long winnerDate;
   @PositiveOrZero private int second;
+  private long secondDate;
 }
