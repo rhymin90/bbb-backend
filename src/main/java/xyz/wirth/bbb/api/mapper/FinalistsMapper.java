@@ -18,6 +18,9 @@ public abstract class FinalistsMapper {
   public abstract FinalistsDto map(Finalists finalists);
 
   public long mapInstantToLong(Instant instant) {
+    if (instant == null) {
+      return Instant.EPOCH.toEpochMilli();
+    }
     return instant.toEpochMilli();
   }
 }
