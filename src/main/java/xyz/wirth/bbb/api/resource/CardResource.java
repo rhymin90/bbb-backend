@@ -4,12 +4,15 @@ import io.quarkus.security.Authenticated;
 import org.jboss.logging.Logger;
 import xyz.wirth.bbb.api.dto.CardDto;
 import xyz.wirth.bbb.api.mapper.CardMapper;
+import xyz.wirth.bbb.api.security.AuthenticationFacade;
 import xyz.wirth.bbb.domain.logic.CardService;
 
 import javax.validation.Valid;
 import javax.ws.rs.*;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.SecurityContext;
 import java.net.URI;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -22,10 +25,13 @@ public class CardResource {
 
   private final Logger LOG = Logger.getLogger(getClass().getSimpleName());
 
+  private final AuthenticationFacade authenticationFacade;
   private final CardMapper cardMapper;
   private final CardService cardService;
 
-  public CardResource(CardMapper cardMapper, CardService cardService) {
+  public CardResource(
+      AuthenticationFacade authenticationFacade, CardMapper cardMapper, CardService cardService) {
+    this.authenticationFacade = authenticationFacade;
     this.cardMapper = cardMapper;
     this.cardService = cardService;
   }
@@ -34,10 +40,16 @@ public class CardResource {
   public List<CardDto> list() {
     LOG.debug("listCards()");
     var cards = cardService.listCards();
-
-    // cards.forEach(card -> LOG.infov("Card: {0}", card));
-
     return cards.stream().map(cardMapper::map).collect(Collectors.toList());
+  }
+
+  @DELETE
+  @Path("/delete/{id}")
+  public Response delete(@Context SecurityContext securityContext, @PathParam("id") Long id) {
+    LOG.infov("Delete card with id: {0}", id);
+    var email = authenticationFacade.getRequesterUserId(securityContext);
+    cardService.deleteCard(id, email);
+    return Response.ok().build(); // TODO deleted response
   }
 
   @POST

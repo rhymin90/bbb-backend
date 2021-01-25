@@ -26,10 +26,10 @@ public class Episode {
     if (this == o) {
       return true;
     }
-    if (!(o instanceof Card)) {
+    if (!(o instanceof Episode)) {
       return false;
     }
-    Card other = (Card) o;
+    Episode other = (Episode) o;
     return id != null && id.equals(other.getId());
   }
 

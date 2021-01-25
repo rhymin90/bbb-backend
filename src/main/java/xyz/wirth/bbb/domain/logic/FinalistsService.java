@@ -7,6 +7,7 @@ import xyz.wirth.bbb.repositories.FinalistsRepository;
 import javax.enterprise.context.ApplicationScoped;
 import javax.persistence.PersistenceException;
 import javax.transaction.Transactional;
+import java.time.Instant;
 
 @ApplicationScoped
 public class FinalistsService {
@@ -26,6 +27,7 @@ public class FinalistsService {
         .orElse(Finalists.builder().userId(userId).winner(0).second(0).build());
   }
 
+  /*
   @Transactional
   public void deleteFinalists(String userId) {
     var finalists = finalistsRepository.findByUserId(userId);
@@ -33,19 +35,37 @@ public class FinalistsService {
       finalistsRepository.delete(finalists.get());
     }
   }
+  */
 
   @Transactional
   public Finalists createOrUpdateFinalists(Finalists finalists) {
 
     try {
-      var existingFinalists = finalistsRepository.findByUserId(finalists.getUserId());
-      if (existingFinalists.isPresent()) {
-        existingFinalists.get().setWinner(finalists.getWinner());
-        existingFinalists.get().setSecond(finalists.getSecond());
-        finalistsRepository.persist(existingFinalists.get());
-        LOG.infov("Updated Finalists entry {0}", existingFinalists.get());
-        return existingFinalists.get();
+      var existingFinalistsOptional = finalistsRepository.findByUserId(finalists.getUserId());
+      if (existingFinalistsOptional.isPresent()) {
+        boolean updateNeeded = false;
+        var existingFinalists = existingFinalistsOptional.get();
+
+        if (existingFinalists.getWinner() != finalists.getWinner()) {
+          existingFinalists.setWinnerDate(Instant.now());
+          existingFinalists.setWinner(finalists.getWinner());
+          updateNeeded = true;
+        }
+
+        if (existingFinalists.getSecond() != finalists.getSecond()) {
+          existingFinalists.setSecondDate(Instant.now());
+          existingFinalists.setSecond(finalists.getSecond());
+          updateNeeded = true;
+        }
+
+        if (updateNeeded) {
+          finalistsRepository.persist(existingFinalists);
+          LOG.infov("Updated Finalists entry {0}", existingFinalists);
+        }
+        return existingFinalists;
       } else {
+        finalists.setWinnerDate(Instant.now());
+        finalists.setSecondDate(Instant.now());
         finalistsRepository.persist(finalists);
         LOG.infov("Created new Finalists entry {0}", finalists);
         return finalists;

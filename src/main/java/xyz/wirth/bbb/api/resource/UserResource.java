@@ -101,7 +101,7 @@ public class UserResource {
 
     final var userPrincipal = (DefaultJWTCallerPrincipal) securityContext.getUserPrincipal();
     final var claimEmail = (String) userPrincipal.getClaim("email");
-    LOG.infov("Update from {0} data for user: {2}", claimEmail, userDto);
+    LOG.debugv("Update from {0} for user: {2}", claimEmail, userDto);
 
     var isAdmin = false;
     if (!email.equals(claimEmail)) {
@@ -114,7 +114,7 @@ public class UserResource {
     if (user == null) {
       return Response.status(Response.Status.NOT_FOUND).build();
     } else {
-      LOG.debugv("Updated data for user with email {0}: {1}", email, user);
+      LOG.infov("Updated data for user with email {0}: {1}", email, user);
       return Response.ok().entity(userMapper.map(user)).build();
     }
   }

@@ -5,6 +5,7 @@ import lombok.*;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import java.time.Instant;
 
 @Entity
 @Table(name = "finalists", schema = "public")
@@ -19,6 +20,8 @@ public class Finalists {
   @Id private String userId;
   private int winner;
   private int second;
+  private Instant winnerDate;
+  private Instant secondDate;
 
   @Override
   public boolean equals(Object o) {
