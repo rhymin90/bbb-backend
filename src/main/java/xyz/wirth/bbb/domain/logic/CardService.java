@@ -44,4 +44,9 @@ public class CardService {
       cardRepository.deleteById(id);
     }
   }
+
+  public void setDeletableForCards(List<Card> cards, boolean deletable) {
+    cards.forEach(it -> it.setDeletable(deletable));
+    cardRepository.persist(cards);
+  }
 }

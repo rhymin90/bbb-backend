@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
 
 @ApplicationScoped
 public class BingoService {
-
+  private static final int BINGO_SIZE = 16;
   private final Logger LOG = Logger.getLogger(getClass().getSimpleName());
 
   private final EpisodeService episodeService;
@@ -45,7 +45,6 @@ public class BingoService {
 
   @Transactional
   public Bingo createBingoForUser(String userId) {
-    // TODO do not create 2 bingos for user for same episode
 
     var likesByCard =
         likeService.listLikes().stream()
@@ -57,8 +56,13 @@ public class BingoService {
             .sorted(
                 (card1, card2) ->
                     Long.compare(likesByCard.get(card2.getId()), likesByCard.get(card1.getId())))
-            .limit(16)
+            .limit(BINGO_SIZE)
             .collect(Collectors.toList());
+
+    if (cards.size() < BINGO_SIZE) {
+      throw new IllegalStateException(
+          "Cannot create bingo with less than " + BINGO_SIZE + " cards");
+    }
 
     var upcomingEpisode = episodeService.getUpcomingEpsiode();
     var existingBingosForEpisode = listBingosForEpisode(upcomingEpisode.getId());
@@ -69,7 +73,7 @@ public class BingoService {
       cardsForBingo = getCardsShuffled(cards);
     }
 
-    // FIXME set card to deletable = false;
+    cardService.setDeletableForCards(cards, false);
 
     var bingo =
         Bingo.builder()
